@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Desafio Interativo - Arcos e Circunferência</title>
+
+  <link rel="stylesheet" href="style_p.css">
+</head>
+<body>
+
+  <main class="container">
+
+    <section class="card">
+
+      <header class="hero-preambulo">
+        <div class="hero-selo">
+          <div class="hero-selo-anel">
+            <img class="hero-selo-logo" src="./logo.png" alt="Logo Professor da Esquina">
+          </div>
+        </div>
+
+        <div class="hero-conteudo">
+          <p class="hero-kicker">Matemática na Veia</p>
+          <h1><span class="hero-titulo-topo">Problemas de</span> <span class="hero-titulo-destaque">Arco e Circunferência</span></h1>
+          <h2>Desafio Interativo: Pêndulo e Comprimento de Arco</h2>
+          <p class="hero-faixa">Aplique os conceitos e teste seus conhecimentos!</p>
+        </div>
+
+        <div class="hero-ilustracao" aria-hidden="true">
+          <div class="hero-circulo"></div>
+          <div class="hero-raio"></div>
+          <div class="hero-compasso">
+            <span class="hero-compasso-topo"></span>
+            <span class="hero-compasso-perna hero-compasso-perna-esquerda"></span>
+            <span class="hero-compasso-perna hero-compasso-perna-direita"></span>
+          </div>
+        </div>
+      </header>
+
+      <div class="problema">
+
+        <p id="enunciado">
+          Carregando problema...
+        </p>
+
+        <div id="figura-problema" class="problema-ilustracao" aria-label="Ilustração dinâmica do pêndulo">
+          <svg
+            id="pendulo-svg"
+            viewBox="0 0 260 360"
+            role="img"
+            aria-labelledby="pendulo-titulo pendulo-descricao"
+          >
+            <title id="pendulo-titulo">Ilustração do pêndulo</title>
+            <desc id="pendulo-descricao">
+              Representação visual do pêndulo com comprimento e ângulo variáveis.
+            </desc>
+
+            <defs>
+              <linearGradient id="poste-gradiente" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#cfcbbd" stop-opacity="0.2"></stop>
+                <stop offset="100%" stop-color="#5e6d5a" stop-opacity="0.08"></stop>
+              </linearGradient>
+              <linearGradient id="arco-gradiente" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#8b1e33"></stop>
+                <stop offset="50%" stop-color="#b4324c"></stop>
+                <stop offset="100%" stop-color="#8b1e33"></stop>
+              </linearGradient>
+              <radialGradient id="esfera-gradiente" cx="35%" cy="30%" r="75%">
+                <stop offset="0%" stop-color="#555860"></stop>
+                <stop offset="38%" stop-color="#23252a"></stop>
+                <stop offset="100%" stop-color="#08090b"></stop>
+              </radialGradient>
+              <radialGradient id="luz-gradiente" cx="50%" cy="18%" r="70%">
+                <stop offset="0%" stop-color="#fff5cc" stop-opacity="0.75"></stop>
+                <stop offset="55%" stop-color="#f5ddb1" stop-opacity="0.22"></stop>
+                <stop offset="100%" stop-color="#f5ddb1" stop-opacity="0"></stop>
+              </radialGradient>
+              <filter id="sombra-suave" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#000000" flood-opacity="0.16"></feDropShadow>
+              </filter>
+              <marker id="seta-arco" markerWidth="6" markerHeight="6" refX="3" refY="3" orient="auto-start-reverse">
+                <path d="M 0 0 L 6 3 L 0 6 z" fill="#8b1e33"></path>
+              </marker>
+            </defs>
+
+            <ellipse class="pendulo-luz" cx="130" cy="142" rx="96" ry="136"></ellipse>
+
+            <g class="pendulo-poste" aria-hidden="true">
+              <path class="pendulo-topo" d="M104 38 Q130 6 156 38"></path>
+              <rect x="118" y="34" width="24" height="230" rx="10"></rect>
+              <rect class="pendulo-luminaria" x="112" y="22" width="36" height="24" rx="8"></rect>
+            </g>
+
+            <ellipse class="pendulo-sombra" cx="130" cy="296" rx="82" ry="14"></ellipse>
+            <circle class="pendulo-pivo" cx="130" cy="46" r="7"></circle>
+
+            <line id="pendulo-eixo-central" class="pendulo-eixo-central" x1="130" y1="46" x2="130" y2="276"></line>
+            <path id="pendulo-arco-angulo" class="pendulo-arco-angulo" d=""></path>
+            <text id="pendulo-angulo-texto" class="pendulo-texto pendulo-angulo-texto" x="130" y="92" text-anchor="middle">15°</text>
+
+            <line id="pendulo-corda-esquerda" class="pendulo-corda" x1="130" y1="46" x2="66" y2="278"></line>
+            <line id="pendulo-corda-direita" class="pendulo-corda" x1="130" y1="46" x2="194" y2="278"></line>
+
+            <g id="pendulo-animacao" class="pendulo-animacao" aria-hidden="true">
+              <path id="pendulo-trajetoria-periodo" class="pendulo-trajetoria-periodo" d=""></path>
+              <line id="pendulo-corda-animada" class="pendulo-corda pendulo-corda-animada" x1="130" y1="46" x2="194" y2="278"></line>
+              <circle id="pendulo-bola-animada" class="pendulo-bola pendulo-bola-animada" cx="194" cy="278" r="9"></circle>
+            </g>
+
+            <path id="pendulo-medida-guia" class="pendulo-medida-guia" d=""></path>
+
+            <path id="pendulo-arco-base" class="pendulo-arco-base" d=""></path>
+
+            <circle id="pendulo-bola-esquerda" class="pendulo-bola" cx="66" cy="278" r="8"></circle>
+            <circle id="pendulo-bola-direita" class="pendulo-bola" cx="194" cy="278" r="8"></circle>
+
+            <text id="pendulo-label-a" class="pendulo-texto pendulo-label" x="52" y="304">A</text>
+            <text id="pendulo-label-b" class="pendulo-texto pendulo-label" x="204" y="304">B</text>
+            <text id="pendulo-comprimento-texto" class="pendulo-texto pendulo-comprimento-texto">
+              <textPath id="pendulo-comprimento-path-texto" href="#pendulo-medida-guia" startOffset="50%" text-anchor="middle">
+                15 cm
+              </textPath>
+            </text>
+
+            <g id="pendulo-gabarito" class="pendulo-gabarito" aria-live="polite">
+              <rect id="pendulo-gabarito-fundo" x="42" y="316" width="176" height="28" rx="14"></rect>
+              <text id="pendulo-gabarito-texto" class="pendulo-texto pendulo-gabarito-texto" x="130" y="334" text-anchor="middle">
+                Gabarito: 7,85 cm
+              </text>
+            </g>
+          </svg>
+        </div>
+
+      </div>
+
+      <div class="painel-valores">
+
+        <label for="comprimento">
+          Comprimento do pêndulo, em cm:
+        </label>
+        <input type="number" id="comprimento" value="15" min="1">
+
+        <label for="angulo">
+          Ângulo de oscilação, em graus:
+        </label>
+        <input type="number" id="angulo" value="15" min="1" max="180">
+
+        <button onclick="atualizarProblema()">
+          Atualizar problema
+        </button>
+
+        <button onclick="sortearProblema()">
+          Sortear novos valores
+        </button>
+
+      </div>
+
+      <div class="resposta-area">
+
+        <label for="resposta">
+          Digite sua resposta em cm:
+        </label>
+
+        <input type="number" id="resposta" placeholder="Ex.: 7.85" step="0.01">
+
+        <button onclick="verificarResposta()">
+          Verificar resposta
+        </button>
+
+      </div>
+
+      <div class="botoes-ajuda">
+
+        <button onclick="mostrarDica1()">
+          Dica 1
+        </button>
+
+        <button onclick="mostrarDica2()">
+          Dica 2
+        </button>
+
+        <button onclick="mostrarResolucao()">
+          Ver resolução
+        </button>
+
+      </div>
+
+      <div id="feedback" class="feedback"></div>
+
+      <div id="dicas" class="dicas"></div>
+
+      <div id="resolucao" class="resolucao"></div>
+
+    </section>
+
+  </main>
+
+  <script src="script_p.js"></script>
+</body>
+</html>
